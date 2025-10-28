@@ -29,7 +29,7 @@ class SyncResource(SyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/transcend-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/dhurtado14/testforMike#accessing-raw-response-data-eg-headers
         """
         return SyncResourceWithRawResponse(self)
 
@@ -38,7 +38,7 @@ class SyncResource(SyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/transcend-python#with_streaming_response
+        For more information, see https://www.github.com/dhurtado14/testforMike#with_streaming_response
         """
         return SyncResourceWithStreamingResponse(self)
 
@@ -146,7 +146,7 @@ class AsyncSyncResource(AsyncAPIResource):
         This property can be used as a prefix for any HTTP method call to return
         the raw response object instead of the parsed content.
 
-        For more information, see https://www.github.com/stainless-sdks/transcend-python#accessing-raw-response-data-eg-headers
+        For more information, see https://www.github.com/dhurtado14/testforMike#accessing-raw-response-data-eg-headers
         """
         return AsyncSyncResourceWithRawResponse(self)
 
@@ -155,7 +155,7 @@ class AsyncSyncResource(AsyncAPIResource):
         """
         An alternative to `.with_raw_response` that doesn't eagerly read the response body.
 
-        For more information, see https://www.github.com/stainless-sdks/transcend-python#with_streaming_response
+        For more information, see https://www.github.com/dhurtado14/testforMike#with_streaming_response
         """
         return AsyncSyncResourceWithStreamingResponse(self)
 
