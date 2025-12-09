@@ -35,6 +35,8 @@ class PreferenceUpsertParams(TypedDict, total=False):
 
 
 class RecordIdentifier(TypedDict, total=False):
+    """The identifiers associated with the user when their preference was collected."""
+
     name: Required[str]
     """The identifier name"""
 
@@ -43,6 +45,8 @@ class RecordIdentifier(TypedDict, total=False):
 
 
 class RecordPurposePreferenceChoice(TypedDict, total=False):
+    """The choice made by the user for this preference topic"""
+
     boolean_value: Annotated[bool, PropertyInfo(alias="booleanValue")]
     """The boolean value of the preference"""
 
@@ -74,6 +78,11 @@ class RecordPurposeWorkflowSettingsAttribute(TypedDict, total=False):
 
 
 class RecordPurposeWorkflowSettingsRegion(TypedDict, total=False):
+    """Specify the region that the request is submitting from.
+
+    See https://github.com/transcend-io/privacy-types/blob/main/src/isoConstants/iso3166-1.ts
+    """
+
     country: Literal[
         "EU",
         "AF",
@@ -5470,6 +5479,8 @@ class RecordPurposeWorkflowSettingsRegion(TypedDict, total=False):
 
 
 class RecordPurposeWorkflowSettings(TypedDict, total=False):
+    """Settings to apply for workflows triggered by this purpose change event."""
+
     attributes: Iterable[RecordPurposeWorkflowSettingsAttribute]
     """
     Custom metadata you can add, which get applied downstream to data subject
@@ -5553,6 +5564,8 @@ class RecordPurpose(TypedDict, total=False):
 
 
 class RecordConsentManagement(TypedDict, total=False):
+    """Consent management metadata on the preference record."""
+
     gpp: str
     """
     For consent management purposes, the IAB GPP String, encoding both USP and USNAT

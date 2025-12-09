@@ -64,6 +64,11 @@ class ConsentPreferenceDeprecatedCreateParams(TypedDict, total=False):
 
 
 class StartKey(TypedDict, total=False):
+    """The key after which to start looking for consent preferences.
+
+    Used for cursor pagination.
+    """
+
     decryption_status: Required[Annotated[Literal["DECRYPTED", "ERROR"], PropertyInfo(alias="decryptionStatus")]]
     """The decryption status of the userId field in the start key.
 

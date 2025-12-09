@@ -30,6 +30,8 @@ class ItemAttribute(BaseModel):
 
 
 class ItemPurposePreferenceChoice(BaseModel):
+    """The choice of the preference."""
+
     boolean_value: Optional[bool] = FieldInfo(alias="booleanValue", default=None)
     """The selected boolean value for the preference."""
 
@@ -49,6 +51,10 @@ class ItemPurposePreference(BaseModel):
 
 
 class ItemPurpose(BaseModel):
+    """
+    When a DSR is triggered as a result of a consent preference change event, this field will include the purpose and preference information that triggered the workflow.
+    """
+
     enabled: bool
     """Whether the purpose is enabled or disabled."""
 
