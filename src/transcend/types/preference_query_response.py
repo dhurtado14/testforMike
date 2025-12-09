@@ -22,6 +22,8 @@ __all__ = [
 
 
 class NodeIdentifier(BaseModel):
+    """The identifiers associated with the user."""
+
     name: str
     """The identifier name"""
 
@@ -30,6 +32,8 @@ class NodeIdentifier(BaseModel):
 
 
 class NodePurposePreferenceChoice(BaseModel):
+    """The choice made by the user for this preference topic"""
+
     boolean_value: Optional[bool] = FieldInfo(alias="booleanValue", default=None)
     """The boolean value of the preference"""
 
@@ -60,6 +64,8 @@ class NodePurpose(BaseModel):
 
 
 class NodeConsentManagement(BaseModel):
+    """Consent management metadata on the preference record."""
+
     airgap_version: Optional[str] = FieldInfo(alias="airgapVersion", default=None)
     """
     If this preference was set by the Transcend Consent Manager, Airgap, this is the
@@ -87,6 +93,8 @@ class NodeMetadata(BaseModel):
 
 
 class NodeSystem(BaseModel):
+    """System metadata on the database record."""
+
     decryption_status: Literal["DECRYPTED", "ERROR"] = FieldInfo(alias="decryptionStatus")
     """The decryption status of the identifiers field."""
 

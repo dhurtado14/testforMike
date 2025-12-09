@@ -497,6 +497,8 @@ class SubjectAttestedExtraIdentifiersVeroUserID(TypedDict, total=False):
 
 
 class SubjectAttestedExtraIdentifiers(TypedDict, total=False):
+    """Extra identifiers that have been attested to belong to the data subject."""
+
     adobe_advertising_cloud_id: Annotated[
         Iterable[SubjectAttestedExtraIdentifiersAdobeAdvertisingCloudID], PropertyInfo(alias="adobeAdvertisingCloudId")
     ]
@@ -624,6 +626,11 @@ class Attribute(TypedDict, total=False):
 
 
 class Region(TypedDict, total=False):
+    """Specify the region that the request is submitting from.
+
+    See https://github.com/transcend-io/privacy-types/blob/main/src/isoConstants/iso3166-1.ts
+    """
+
     country: Literal[
         "EU",
         "AF",

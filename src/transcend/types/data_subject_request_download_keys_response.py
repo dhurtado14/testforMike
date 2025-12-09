@@ -19,6 +19,8 @@ __all__ = [
 
 
 class _Links(BaseModel):
+    """Pagination information"""
+
     self: str
     """The URL path of this page."""
 
@@ -30,6 +32,8 @@ class _Links(BaseModel):
 
 
 class NodeDataPointDataSilo(BaseModel):
+    """Information about the associated integration in Transcend."""
+
     id: str
     """The ID of this integration in Transcend."""
 
@@ -47,6 +51,8 @@ class NodeDataPointDataSilo(BaseModel):
 
 
 class NodeDataPointDescription(BaseModel):
+    """Information about an internationalized message."""
+
     id: str
     """The ID of this message in Transcend."""
 
@@ -55,11 +61,15 @@ class NodeDataPointDescription(BaseModel):
 
 
 class NodeDataPointMetadata(BaseModel):
+    """Metadata about the datapoint."""
+
     references: Optional[List[str]] = None
     """References to documentation about the datapoint."""
 
 
 class NodeDataPointTitle(BaseModel):
+    """Information about an internationalized message."""
+
     id: str
     """The ID of this message in Transcend."""
 
@@ -68,6 +78,8 @@ class NodeDataPointTitle(BaseModel):
 
 
 class NodeDataPoint(BaseModel):
+    """Information about the associated with a datapoint when listing request files."""
+
     id: str
     """The ID of this datapoint in Transcend."""
 
