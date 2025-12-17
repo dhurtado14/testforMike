@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 import os
-from typing import Any, Dict, Mapping, cast
+from typing import TYPE_CHECKING, Any, Dict, Mapping, cast
 from typing_extensions import Self, Literal, override
 
 import httpx
@@ -20,22 +20,8 @@ from ._types import (
     not_given,
 )
 from ._utils import is_given, get_async_library
+from ._compat import cached_property
 from ._version import __version__
-from .resources import (
-    llm,
-    sync,
-    files,
-    classify,
-    data_silo,
-    datapoint,
-    preferences,
-    public_keys,
-    datapoint_chunked,
-    enrich_identifiers,
-    consent_preferences,
-    request_identifiers,
-    data_subject_request,
-)
 from ._streaming import Stream as Stream, AsyncStream as AsyncStream
 from ._exceptions import APIStatusError, TranscendError
 from ._base_client import (
@@ -43,6 +29,36 @@ from ._base_client import (
     SyncAPIClient,
     AsyncAPIClient,
 )
+
+if TYPE_CHECKING:
+    from .resources import (
+        llm,
+        sync,
+        files,
+        classify,
+        data_silo,
+        datapoint,
+        preferences,
+        public_keys,
+        datapoint_chunked,
+        enrich_identifiers,
+        consent_preferences,
+        request_identifiers,
+        data_subject_request,
+    )
+    from .resources.llm import LlmResource, AsyncLlmResource
+    from .resources.sync import SyncResource, AsyncSyncResource
+    from .resources.files import FilesResource, AsyncFilesResource
+    from .resources.classify import ClassifyResource, AsyncClassifyResource
+    from .resources.data_silo import DataSiloResource, AsyncDataSiloResource
+    from .resources.datapoint import DatapointResource, AsyncDatapointResource
+    from .resources.preferences import PreferencesResource, AsyncPreferencesResource
+    from .resources.public_keys import PublicKeysResource, AsyncPublicKeysResource
+    from .resources.datapoint_chunked import DatapointChunkedResource, AsyncDatapointChunkedResource
+    from .resources.enrich_identifiers import EnrichIdentifiersResource, AsyncEnrichIdentifiersResource
+    from .resources.consent_preferences import ConsentPreferencesResource, AsyncConsentPreferencesResource
+    from .resources.request_identifiers import RequestIdentifiersResource, AsyncRequestIdentifiersResource
+    from .resources.data_subject_request import DataSubjectRequestResource, AsyncDataSubjectRequestResource
 
 __all__ = [
     "ENVIRONMENTS",
@@ -66,22 +82,6 @@ ENVIRONMENTS: Dict[str, str] = {
 
 
 class Transcend(SyncAPIClient):
-    llm: llm.LlmResource
-    classify: classify.ClassifyResource
-    public_keys: public_keys.PublicKeysResource
-    datapoint: datapoint.DatapointResource
-    datapoint_chunked: datapoint_chunked.DatapointChunkedResource
-    data_silo: data_silo.DataSiloResource
-    enrich_identifiers: enrich_identifiers.EnrichIdentifiersResource
-    request_identifiers: request_identifiers.RequestIdentifiersResource
-    data_subject_request: data_subject_request.DataSubjectRequestResource
-    files: files.FilesResource
-    consent_preferences: consent_preferences.ConsentPreferencesResource
-    preferences: preferences.PreferencesResource
-    sync: sync.SyncResource
-    with_raw_response: TranscendWithRawResponse
-    with_streaming_response: TranscendWithStreamedResponse
-
     # client options
     api_key: str
     bearer_token: str
@@ -173,21 +173,91 @@ class Transcend(SyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.llm = llm.LlmResource(self)
-        self.classify = classify.ClassifyResource(self)
-        self.public_keys = public_keys.PublicKeysResource(self)
-        self.datapoint = datapoint.DatapointResource(self)
-        self.datapoint_chunked = datapoint_chunked.DatapointChunkedResource(self)
-        self.data_silo = data_silo.DataSiloResource(self)
-        self.enrich_identifiers = enrich_identifiers.EnrichIdentifiersResource(self)
-        self.request_identifiers = request_identifiers.RequestIdentifiersResource(self)
-        self.data_subject_request = data_subject_request.DataSubjectRequestResource(self)
-        self.files = files.FilesResource(self)
-        self.consent_preferences = consent_preferences.ConsentPreferencesResource(self)
-        self.preferences = preferences.PreferencesResource(self)
-        self.sync = sync.SyncResource(self)
-        self.with_raw_response = TranscendWithRawResponse(self)
-        self.with_streaming_response = TranscendWithStreamedResponse(self)
+    @cached_property
+    def llm(self) -> LlmResource:
+        from .resources.llm import LlmResource
+
+        return LlmResource(self)
+
+    @cached_property
+    def classify(self) -> ClassifyResource:
+        from .resources.classify import ClassifyResource
+
+        return ClassifyResource(self)
+
+    @cached_property
+    def public_keys(self) -> PublicKeysResource:
+        from .resources.public_keys import PublicKeysResource
+
+        return PublicKeysResource(self)
+
+    @cached_property
+    def datapoint(self) -> DatapointResource:
+        from .resources.datapoint import DatapointResource
+
+        return DatapointResource(self)
+
+    @cached_property
+    def datapoint_chunked(self) -> DatapointChunkedResource:
+        from .resources.datapoint_chunked import DatapointChunkedResource
+
+        return DatapointChunkedResource(self)
+
+    @cached_property
+    def data_silo(self) -> DataSiloResource:
+        from .resources.data_silo import DataSiloResource
+
+        return DataSiloResource(self)
+
+    @cached_property
+    def enrich_identifiers(self) -> EnrichIdentifiersResource:
+        from .resources.enrich_identifiers import EnrichIdentifiersResource
+
+        return EnrichIdentifiersResource(self)
+
+    @cached_property
+    def request_identifiers(self) -> RequestIdentifiersResource:
+        from .resources.request_identifiers import RequestIdentifiersResource
+
+        return RequestIdentifiersResource(self)
+
+    @cached_property
+    def data_subject_request(self) -> DataSubjectRequestResource:
+        from .resources.data_subject_request import DataSubjectRequestResource
+
+        return DataSubjectRequestResource(self)
+
+    @cached_property
+    def files(self) -> FilesResource:
+        from .resources.files import FilesResource
+
+        return FilesResource(self)
+
+    @cached_property
+    def consent_preferences(self) -> ConsentPreferencesResource:
+        from .resources.consent_preferences import ConsentPreferencesResource
+
+        return ConsentPreferencesResource(self)
+
+    @cached_property
+    def preferences(self) -> PreferencesResource:
+        from .resources.preferences import PreferencesResource
+
+        return PreferencesResource(self)
+
+    @cached_property
+    def sync(self) -> SyncResource:
+        from .resources.sync import SyncResource
+
+        return SyncResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> TranscendWithRawResponse:
+        return TranscendWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> TranscendWithStreamedResponse:
+        return TranscendWithStreamedResponse(self)
 
     @property
     @override
@@ -309,22 +379,6 @@ class Transcend(SyncAPIClient):
 
 
 class AsyncTranscend(AsyncAPIClient):
-    llm: llm.AsyncLlmResource
-    classify: classify.AsyncClassifyResource
-    public_keys: public_keys.AsyncPublicKeysResource
-    datapoint: datapoint.AsyncDatapointResource
-    datapoint_chunked: datapoint_chunked.AsyncDatapointChunkedResource
-    data_silo: data_silo.AsyncDataSiloResource
-    enrich_identifiers: enrich_identifiers.AsyncEnrichIdentifiersResource
-    request_identifiers: request_identifiers.AsyncRequestIdentifiersResource
-    data_subject_request: data_subject_request.AsyncDataSubjectRequestResource
-    files: files.AsyncFilesResource
-    consent_preferences: consent_preferences.AsyncConsentPreferencesResource
-    preferences: preferences.AsyncPreferencesResource
-    sync: sync.AsyncSyncResource
-    with_raw_response: AsyncTranscendWithRawResponse
-    with_streaming_response: AsyncTranscendWithStreamedResponse
-
     # client options
     api_key: str
     bearer_token: str
@@ -416,21 +470,91 @@ class AsyncTranscend(AsyncAPIClient):
             _strict_response_validation=_strict_response_validation,
         )
 
-        self.llm = llm.AsyncLlmResource(self)
-        self.classify = classify.AsyncClassifyResource(self)
-        self.public_keys = public_keys.AsyncPublicKeysResource(self)
-        self.datapoint = datapoint.AsyncDatapointResource(self)
-        self.datapoint_chunked = datapoint_chunked.AsyncDatapointChunkedResource(self)
-        self.data_silo = data_silo.AsyncDataSiloResource(self)
-        self.enrich_identifiers = enrich_identifiers.AsyncEnrichIdentifiersResource(self)
-        self.request_identifiers = request_identifiers.AsyncRequestIdentifiersResource(self)
-        self.data_subject_request = data_subject_request.AsyncDataSubjectRequestResource(self)
-        self.files = files.AsyncFilesResource(self)
-        self.consent_preferences = consent_preferences.AsyncConsentPreferencesResource(self)
-        self.preferences = preferences.AsyncPreferencesResource(self)
-        self.sync = sync.AsyncSyncResource(self)
-        self.with_raw_response = AsyncTranscendWithRawResponse(self)
-        self.with_streaming_response = AsyncTranscendWithStreamedResponse(self)
+    @cached_property
+    def llm(self) -> AsyncLlmResource:
+        from .resources.llm import AsyncLlmResource
+
+        return AsyncLlmResource(self)
+
+    @cached_property
+    def classify(self) -> AsyncClassifyResource:
+        from .resources.classify import AsyncClassifyResource
+
+        return AsyncClassifyResource(self)
+
+    @cached_property
+    def public_keys(self) -> AsyncPublicKeysResource:
+        from .resources.public_keys import AsyncPublicKeysResource
+
+        return AsyncPublicKeysResource(self)
+
+    @cached_property
+    def datapoint(self) -> AsyncDatapointResource:
+        from .resources.datapoint import AsyncDatapointResource
+
+        return AsyncDatapointResource(self)
+
+    @cached_property
+    def datapoint_chunked(self) -> AsyncDatapointChunkedResource:
+        from .resources.datapoint_chunked import AsyncDatapointChunkedResource
+
+        return AsyncDatapointChunkedResource(self)
+
+    @cached_property
+    def data_silo(self) -> AsyncDataSiloResource:
+        from .resources.data_silo import AsyncDataSiloResource
+
+        return AsyncDataSiloResource(self)
+
+    @cached_property
+    def enrich_identifiers(self) -> AsyncEnrichIdentifiersResource:
+        from .resources.enrich_identifiers import AsyncEnrichIdentifiersResource
+
+        return AsyncEnrichIdentifiersResource(self)
+
+    @cached_property
+    def request_identifiers(self) -> AsyncRequestIdentifiersResource:
+        from .resources.request_identifiers import AsyncRequestIdentifiersResource
+
+        return AsyncRequestIdentifiersResource(self)
+
+    @cached_property
+    def data_subject_request(self) -> AsyncDataSubjectRequestResource:
+        from .resources.data_subject_request import AsyncDataSubjectRequestResource
+
+        return AsyncDataSubjectRequestResource(self)
+
+    @cached_property
+    def files(self) -> AsyncFilesResource:
+        from .resources.files import AsyncFilesResource
+
+        return AsyncFilesResource(self)
+
+    @cached_property
+    def consent_preferences(self) -> AsyncConsentPreferencesResource:
+        from .resources.consent_preferences import AsyncConsentPreferencesResource
+
+        return AsyncConsentPreferencesResource(self)
+
+    @cached_property
+    def preferences(self) -> AsyncPreferencesResource:
+        from .resources.preferences import AsyncPreferencesResource
+
+        return AsyncPreferencesResource(self)
+
+    @cached_property
+    def sync(self) -> AsyncSyncResource:
+        from .resources.sync import AsyncSyncResource
+
+        return AsyncSyncResource(self)
+
+    @cached_property
+    def with_raw_response(self) -> AsyncTranscendWithRawResponse:
+        return AsyncTranscendWithRawResponse(self)
+
+    @cached_property
+    def with_streaming_response(self) -> AsyncTranscendWithStreamedResponse:
+        return AsyncTranscendWithStreamedResponse(self)
 
     @property
     @override
@@ -552,107 +676,343 @@ class AsyncTranscend(AsyncAPIClient):
 
 
 class TranscendWithRawResponse:
+    _client: Transcend
+
     def __init__(self, client: Transcend) -> None:
-        self.llm = llm.LlmResourceWithRawResponse(client.llm)
-        self.classify = classify.ClassifyResourceWithRawResponse(client.classify)
-        self.public_keys = public_keys.PublicKeysResourceWithRawResponse(client.public_keys)
-        self.datapoint = datapoint.DatapointResourceWithRawResponse(client.datapoint)
-        self.datapoint_chunked = datapoint_chunked.DatapointChunkedResourceWithRawResponse(client.datapoint_chunked)
-        self.data_silo = data_silo.DataSiloResourceWithRawResponse(client.data_silo)
-        self.enrich_identifiers = enrich_identifiers.EnrichIdentifiersResourceWithRawResponse(client.enrich_identifiers)
-        self.request_identifiers = request_identifiers.RequestIdentifiersResourceWithRawResponse(
-            client.request_identifiers
-        )
-        self.data_subject_request = data_subject_request.DataSubjectRequestResourceWithRawResponse(
-            client.data_subject_request
-        )
-        self.files = files.FilesResourceWithRawResponse(client.files)
-        self.consent_preferences = consent_preferences.ConsentPreferencesResourceWithRawResponse(
-            client.consent_preferences
-        )
-        self.preferences = preferences.PreferencesResourceWithRawResponse(client.preferences)
-        self.sync = sync.SyncResourceWithRawResponse(client.sync)
+        self._client = client
+
+    @cached_property
+    def llm(self) -> llm.LlmResourceWithRawResponse:
+        from .resources.llm import LlmResourceWithRawResponse
+
+        return LlmResourceWithRawResponse(self._client.llm)
+
+    @cached_property
+    def classify(self) -> classify.ClassifyResourceWithRawResponse:
+        from .resources.classify import ClassifyResourceWithRawResponse
+
+        return ClassifyResourceWithRawResponse(self._client.classify)
+
+    @cached_property
+    def public_keys(self) -> public_keys.PublicKeysResourceWithRawResponse:
+        from .resources.public_keys import PublicKeysResourceWithRawResponse
+
+        return PublicKeysResourceWithRawResponse(self._client.public_keys)
+
+    @cached_property
+    def datapoint(self) -> datapoint.DatapointResourceWithRawResponse:
+        from .resources.datapoint import DatapointResourceWithRawResponse
+
+        return DatapointResourceWithRawResponse(self._client.datapoint)
+
+    @cached_property
+    def datapoint_chunked(self) -> datapoint_chunked.DatapointChunkedResourceWithRawResponse:
+        from .resources.datapoint_chunked import DatapointChunkedResourceWithRawResponse
+
+        return DatapointChunkedResourceWithRawResponse(self._client.datapoint_chunked)
+
+    @cached_property
+    def data_silo(self) -> data_silo.DataSiloResourceWithRawResponse:
+        from .resources.data_silo import DataSiloResourceWithRawResponse
+
+        return DataSiloResourceWithRawResponse(self._client.data_silo)
+
+    @cached_property
+    def enrich_identifiers(self) -> enrich_identifiers.EnrichIdentifiersResourceWithRawResponse:
+        from .resources.enrich_identifiers import EnrichIdentifiersResourceWithRawResponse
+
+        return EnrichIdentifiersResourceWithRawResponse(self._client.enrich_identifiers)
+
+    @cached_property
+    def request_identifiers(self) -> request_identifiers.RequestIdentifiersResourceWithRawResponse:
+        from .resources.request_identifiers import RequestIdentifiersResourceWithRawResponse
+
+        return RequestIdentifiersResourceWithRawResponse(self._client.request_identifiers)
+
+    @cached_property
+    def data_subject_request(self) -> data_subject_request.DataSubjectRequestResourceWithRawResponse:
+        from .resources.data_subject_request import DataSubjectRequestResourceWithRawResponse
+
+        return DataSubjectRequestResourceWithRawResponse(self._client.data_subject_request)
+
+    @cached_property
+    def files(self) -> files.FilesResourceWithRawResponse:
+        from .resources.files import FilesResourceWithRawResponse
+
+        return FilesResourceWithRawResponse(self._client.files)
+
+    @cached_property
+    def consent_preferences(self) -> consent_preferences.ConsentPreferencesResourceWithRawResponse:
+        from .resources.consent_preferences import ConsentPreferencesResourceWithRawResponse
+
+        return ConsentPreferencesResourceWithRawResponse(self._client.consent_preferences)
+
+    @cached_property
+    def preferences(self) -> preferences.PreferencesResourceWithRawResponse:
+        from .resources.preferences import PreferencesResourceWithRawResponse
+
+        return PreferencesResourceWithRawResponse(self._client.preferences)
+
+    @cached_property
+    def sync(self) -> sync.SyncResourceWithRawResponse:
+        from .resources.sync import SyncResourceWithRawResponse
+
+        return SyncResourceWithRawResponse(self._client.sync)
 
 
 class AsyncTranscendWithRawResponse:
+    _client: AsyncTranscend
+
     def __init__(self, client: AsyncTranscend) -> None:
-        self.llm = llm.AsyncLlmResourceWithRawResponse(client.llm)
-        self.classify = classify.AsyncClassifyResourceWithRawResponse(client.classify)
-        self.public_keys = public_keys.AsyncPublicKeysResourceWithRawResponse(client.public_keys)
-        self.datapoint = datapoint.AsyncDatapointResourceWithRawResponse(client.datapoint)
-        self.datapoint_chunked = datapoint_chunked.AsyncDatapointChunkedResourceWithRawResponse(
-            client.datapoint_chunked
-        )
-        self.data_silo = data_silo.AsyncDataSiloResourceWithRawResponse(client.data_silo)
-        self.enrich_identifiers = enrich_identifiers.AsyncEnrichIdentifiersResourceWithRawResponse(
-            client.enrich_identifiers
-        )
-        self.request_identifiers = request_identifiers.AsyncRequestIdentifiersResourceWithRawResponse(
-            client.request_identifiers
-        )
-        self.data_subject_request = data_subject_request.AsyncDataSubjectRequestResourceWithRawResponse(
-            client.data_subject_request
-        )
-        self.files = files.AsyncFilesResourceWithRawResponse(client.files)
-        self.consent_preferences = consent_preferences.AsyncConsentPreferencesResourceWithRawResponse(
-            client.consent_preferences
-        )
-        self.preferences = preferences.AsyncPreferencesResourceWithRawResponse(client.preferences)
-        self.sync = sync.AsyncSyncResourceWithRawResponse(client.sync)
+        self._client = client
+
+    @cached_property
+    def llm(self) -> llm.AsyncLlmResourceWithRawResponse:
+        from .resources.llm import AsyncLlmResourceWithRawResponse
+
+        return AsyncLlmResourceWithRawResponse(self._client.llm)
+
+    @cached_property
+    def classify(self) -> classify.AsyncClassifyResourceWithRawResponse:
+        from .resources.classify import AsyncClassifyResourceWithRawResponse
+
+        return AsyncClassifyResourceWithRawResponse(self._client.classify)
+
+    @cached_property
+    def public_keys(self) -> public_keys.AsyncPublicKeysResourceWithRawResponse:
+        from .resources.public_keys import AsyncPublicKeysResourceWithRawResponse
+
+        return AsyncPublicKeysResourceWithRawResponse(self._client.public_keys)
+
+    @cached_property
+    def datapoint(self) -> datapoint.AsyncDatapointResourceWithRawResponse:
+        from .resources.datapoint import AsyncDatapointResourceWithRawResponse
+
+        return AsyncDatapointResourceWithRawResponse(self._client.datapoint)
+
+    @cached_property
+    def datapoint_chunked(self) -> datapoint_chunked.AsyncDatapointChunkedResourceWithRawResponse:
+        from .resources.datapoint_chunked import AsyncDatapointChunkedResourceWithRawResponse
+
+        return AsyncDatapointChunkedResourceWithRawResponse(self._client.datapoint_chunked)
+
+    @cached_property
+    def data_silo(self) -> data_silo.AsyncDataSiloResourceWithRawResponse:
+        from .resources.data_silo import AsyncDataSiloResourceWithRawResponse
+
+        return AsyncDataSiloResourceWithRawResponse(self._client.data_silo)
+
+    @cached_property
+    def enrich_identifiers(self) -> enrich_identifiers.AsyncEnrichIdentifiersResourceWithRawResponse:
+        from .resources.enrich_identifiers import AsyncEnrichIdentifiersResourceWithRawResponse
+
+        return AsyncEnrichIdentifiersResourceWithRawResponse(self._client.enrich_identifiers)
+
+    @cached_property
+    def request_identifiers(self) -> request_identifiers.AsyncRequestIdentifiersResourceWithRawResponse:
+        from .resources.request_identifiers import AsyncRequestIdentifiersResourceWithRawResponse
+
+        return AsyncRequestIdentifiersResourceWithRawResponse(self._client.request_identifiers)
+
+    @cached_property
+    def data_subject_request(self) -> data_subject_request.AsyncDataSubjectRequestResourceWithRawResponse:
+        from .resources.data_subject_request import AsyncDataSubjectRequestResourceWithRawResponse
+
+        return AsyncDataSubjectRequestResourceWithRawResponse(self._client.data_subject_request)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithRawResponse:
+        from .resources.files import AsyncFilesResourceWithRawResponse
+
+        return AsyncFilesResourceWithRawResponse(self._client.files)
+
+    @cached_property
+    def consent_preferences(self) -> consent_preferences.AsyncConsentPreferencesResourceWithRawResponse:
+        from .resources.consent_preferences import AsyncConsentPreferencesResourceWithRawResponse
+
+        return AsyncConsentPreferencesResourceWithRawResponse(self._client.consent_preferences)
+
+    @cached_property
+    def preferences(self) -> preferences.AsyncPreferencesResourceWithRawResponse:
+        from .resources.preferences import AsyncPreferencesResourceWithRawResponse
+
+        return AsyncPreferencesResourceWithRawResponse(self._client.preferences)
+
+    @cached_property
+    def sync(self) -> sync.AsyncSyncResourceWithRawResponse:
+        from .resources.sync import AsyncSyncResourceWithRawResponse
+
+        return AsyncSyncResourceWithRawResponse(self._client.sync)
 
 
 class TranscendWithStreamedResponse:
+    _client: Transcend
+
     def __init__(self, client: Transcend) -> None:
-        self.llm = llm.LlmResourceWithStreamingResponse(client.llm)
-        self.classify = classify.ClassifyResourceWithStreamingResponse(client.classify)
-        self.public_keys = public_keys.PublicKeysResourceWithStreamingResponse(client.public_keys)
-        self.datapoint = datapoint.DatapointResourceWithStreamingResponse(client.datapoint)
-        self.datapoint_chunked = datapoint_chunked.DatapointChunkedResourceWithStreamingResponse(
-            client.datapoint_chunked
-        )
-        self.data_silo = data_silo.DataSiloResourceWithStreamingResponse(client.data_silo)
-        self.enrich_identifiers = enrich_identifiers.EnrichIdentifiersResourceWithStreamingResponse(
-            client.enrich_identifiers
-        )
-        self.request_identifiers = request_identifiers.RequestIdentifiersResourceWithStreamingResponse(
-            client.request_identifiers
-        )
-        self.data_subject_request = data_subject_request.DataSubjectRequestResourceWithStreamingResponse(
-            client.data_subject_request
-        )
-        self.files = files.FilesResourceWithStreamingResponse(client.files)
-        self.consent_preferences = consent_preferences.ConsentPreferencesResourceWithStreamingResponse(
-            client.consent_preferences
-        )
-        self.preferences = preferences.PreferencesResourceWithStreamingResponse(client.preferences)
-        self.sync = sync.SyncResourceWithStreamingResponse(client.sync)
+        self._client = client
+
+    @cached_property
+    def llm(self) -> llm.LlmResourceWithStreamingResponse:
+        from .resources.llm import LlmResourceWithStreamingResponse
+
+        return LlmResourceWithStreamingResponse(self._client.llm)
+
+    @cached_property
+    def classify(self) -> classify.ClassifyResourceWithStreamingResponse:
+        from .resources.classify import ClassifyResourceWithStreamingResponse
+
+        return ClassifyResourceWithStreamingResponse(self._client.classify)
+
+    @cached_property
+    def public_keys(self) -> public_keys.PublicKeysResourceWithStreamingResponse:
+        from .resources.public_keys import PublicKeysResourceWithStreamingResponse
+
+        return PublicKeysResourceWithStreamingResponse(self._client.public_keys)
+
+    @cached_property
+    def datapoint(self) -> datapoint.DatapointResourceWithStreamingResponse:
+        from .resources.datapoint import DatapointResourceWithStreamingResponse
+
+        return DatapointResourceWithStreamingResponse(self._client.datapoint)
+
+    @cached_property
+    def datapoint_chunked(self) -> datapoint_chunked.DatapointChunkedResourceWithStreamingResponse:
+        from .resources.datapoint_chunked import DatapointChunkedResourceWithStreamingResponse
+
+        return DatapointChunkedResourceWithStreamingResponse(self._client.datapoint_chunked)
+
+    @cached_property
+    def data_silo(self) -> data_silo.DataSiloResourceWithStreamingResponse:
+        from .resources.data_silo import DataSiloResourceWithStreamingResponse
+
+        return DataSiloResourceWithStreamingResponse(self._client.data_silo)
+
+    @cached_property
+    def enrich_identifiers(self) -> enrich_identifiers.EnrichIdentifiersResourceWithStreamingResponse:
+        from .resources.enrich_identifiers import EnrichIdentifiersResourceWithStreamingResponse
+
+        return EnrichIdentifiersResourceWithStreamingResponse(self._client.enrich_identifiers)
+
+    @cached_property
+    def request_identifiers(self) -> request_identifiers.RequestIdentifiersResourceWithStreamingResponse:
+        from .resources.request_identifiers import RequestIdentifiersResourceWithStreamingResponse
+
+        return RequestIdentifiersResourceWithStreamingResponse(self._client.request_identifiers)
+
+    @cached_property
+    def data_subject_request(self) -> data_subject_request.DataSubjectRequestResourceWithStreamingResponse:
+        from .resources.data_subject_request import DataSubjectRequestResourceWithStreamingResponse
+
+        return DataSubjectRequestResourceWithStreamingResponse(self._client.data_subject_request)
+
+    @cached_property
+    def files(self) -> files.FilesResourceWithStreamingResponse:
+        from .resources.files import FilesResourceWithStreamingResponse
+
+        return FilesResourceWithStreamingResponse(self._client.files)
+
+    @cached_property
+    def consent_preferences(self) -> consent_preferences.ConsentPreferencesResourceWithStreamingResponse:
+        from .resources.consent_preferences import ConsentPreferencesResourceWithStreamingResponse
+
+        return ConsentPreferencesResourceWithStreamingResponse(self._client.consent_preferences)
+
+    @cached_property
+    def preferences(self) -> preferences.PreferencesResourceWithStreamingResponse:
+        from .resources.preferences import PreferencesResourceWithStreamingResponse
+
+        return PreferencesResourceWithStreamingResponse(self._client.preferences)
+
+    @cached_property
+    def sync(self) -> sync.SyncResourceWithStreamingResponse:
+        from .resources.sync import SyncResourceWithStreamingResponse
+
+        return SyncResourceWithStreamingResponse(self._client.sync)
 
 
 class AsyncTranscendWithStreamedResponse:
+    _client: AsyncTranscend
+
     def __init__(self, client: AsyncTranscend) -> None:
-        self.llm = llm.AsyncLlmResourceWithStreamingResponse(client.llm)
-        self.classify = classify.AsyncClassifyResourceWithStreamingResponse(client.classify)
-        self.public_keys = public_keys.AsyncPublicKeysResourceWithStreamingResponse(client.public_keys)
-        self.datapoint = datapoint.AsyncDatapointResourceWithStreamingResponse(client.datapoint)
-        self.datapoint_chunked = datapoint_chunked.AsyncDatapointChunkedResourceWithStreamingResponse(
-            client.datapoint_chunked
-        )
-        self.data_silo = data_silo.AsyncDataSiloResourceWithStreamingResponse(client.data_silo)
-        self.enrich_identifiers = enrich_identifiers.AsyncEnrichIdentifiersResourceWithStreamingResponse(
-            client.enrich_identifiers
-        )
-        self.request_identifiers = request_identifiers.AsyncRequestIdentifiersResourceWithStreamingResponse(
-            client.request_identifiers
-        )
-        self.data_subject_request = data_subject_request.AsyncDataSubjectRequestResourceWithStreamingResponse(
-            client.data_subject_request
-        )
-        self.files = files.AsyncFilesResourceWithStreamingResponse(client.files)
-        self.consent_preferences = consent_preferences.AsyncConsentPreferencesResourceWithStreamingResponse(
-            client.consent_preferences
-        )
-        self.preferences = preferences.AsyncPreferencesResourceWithStreamingResponse(client.preferences)
-        self.sync = sync.AsyncSyncResourceWithStreamingResponse(client.sync)
+        self._client = client
+
+    @cached_property
+    def llm(self) -> llm.AsyncLlmResourceWithStreamingResponse:
+        from .resources.llm import AsyncLlmResourceWithStreamingResponse
+
+        return AsyncLlmResourceWithStreamingResponse(self._client.llm)
+
+    @cached_property
+    def classify(self) -> classify.AsyncClassifyResourceWithStreamingResponse:
+        from .resources.classify import AsyncClassifyResourceWithStreamingResponse
+
+        return AsyncClassifyResourceWithStreamingResponse(self._client.classify)
+
+    @cached_property
+    def public_keys(self) -> public_keys.AsyncPublicKeysResourceWithStreamingResponse:
+        from .resources.public_keys import AsyncPublicKeysResourceWithStreamingResponse
+
+        return AsyncPublicKeysResourceWithStreamingResponse(self._client.public_keys)
+
+    @cached_property
+    def datapoint(self) -> datapoint.AsyncDatapointResourceWithStreamingResponse:
+        from .resources.datapoint import AsyncDatapointResourceWithStreamingResponse
+
+        return AsyncDatapointResourceWithStreamingResponse(self._client.datapoint)
+
+    @cached_property
+    def datapoint_chunked(self) -> datapoint_chunked.AsyncDatapointChunkedResourceWithStreamingResponse:
+        from .resources.datapoint_chunked import AsyncDatapointChunkedResourceWithStreamingResponse
+
+        return AsyncDatapointChunkedResourceWithStreamingResponse(self._client.datapoint_chunked)
+
+    @cached_property
+    def data_silo(self) -> data_silo.AsyncDataSiloResourceWithStreamingResponse:
+        from .resources.data_silo import AsyncDataSiloResourceWithStreamingResponse
+
+        return AsyncDataSiloResourceWithStreamingResponse(self._client.data_silo)
+
+    @cached_property
+    def enrich_identifiers(self) -> enrich_identifiers.AsyncEnrichIdentifiersResourceWithStreamingResponse:
+        from .resources.enrich_identifiers import AsyncEnrichIdentifiersResourceWithStreamingResponse
+
+        return AsyncEnrichIdentifiersResourceWithStreamingResponse(self._client.enrich_identifiers)
+
+    @cached_property
+    def request_identifiers(self) -> request_identifiers.AsyncRequestIdentifiersResourceWithStreamingResponse:
+        from .resources.request_identifiers import AsyncRequestIdentifiersResourceWithStreamingResponse
+
+        return AsyncRequestIdentifiersResourceWithStreamingResponse(self._client.request_identifiers)
+
+    @cached_property
+    def data_subject_request(self) -> data_subject_request.AsyncDataSubjectRequestResourceWithStreamingResponse:
+        from .resources.data_subject_request import AsyncDataSubjectRequestResourceWithStreamingResponse
+
+        return AsyncDataSubjectRequestResourceWithStreamingResponse(self._client.data_subject_request)
+
+    @cached_property
+    def files(self) -> files.AsyncFilesResourceWithStreamingResponse:
+        from .resources.files import AsyncFilesResourceWithStreamingResponse
+
+        return AsyncFilesResourceWithStreamingResponse(self._client.files)
+
+    @cached_property
+    def consent_preferences(self) -> consent_preferences.AsyncConsentPreferencesResourceWithStreamingResponse:
+        from .resources.consent_preferences import AsyncConsentPreferencesResourceWithStreamingResponse
+
+        return AsyncConsentPreferencesResourceWithStreamingResponse(self._client.consent_preferences)
+
+    @cached_property
+    def preferences(self) -> preferences.AsyncPreferencesResourceWithStreamingResponse:
+        from .resources.preferences import AsyncPreferencesResourceWithStreamingResponse
+
+        return AsyncPreferencesResourceWithStreamingResponse(self._client.preferences)
+
+    @cached_property
+    def sync(self) -> sync.AsyncSyncResourceWithStreamingResponse:
+        from .resources.sync import AsyncSyncResourceWithStreamingResponse
+
+        return AsyncSyncResourceWithStreamingResponse(self._client.sync)
 
 
 Client = Transcend
