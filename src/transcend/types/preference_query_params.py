@@ -38,6 +38,8 @@ class FilterIdentifiersIdentifier(TypedDict, total=False):
 
 
 class FilterIdentifiers(TypedDict, total=False):
+    """Filter by user identifiers"""
+
     identifiers: Iterable[FilterIdentifiersIdentifier]
     """The list of identifiers, each corresponding to a unique user.
 
@@ -46,6 +48,8 @@ class FilterIdentifiers(TypedDict, total=False):
 
 
 class FilterUnionMember1(TypedDict, total=False):
+    """Filter by when the preference was last updated"""
+
     timestamp_after: Annotated[Union[str, datetime], PropertyInfo(alias="timestampAfter", format="iso8601")]
     """Filter for preferences updated after a given timestamp."""
 
@@ -54,6 +58,8 @@ class FilterUnionMember1(TypedDict, total=False):
 
 
 class FilterSystemSystem(TypedDict, total=False):
+    """System metadata on the database record."""
+
     updated_after: Annotated[Union[str, datetime], PropertyInfo(alias="updatedAfter", format="iso8601")]
     """Filter for records updated after a given timestamp.
 
@@ -70,6 +76,8 @@ class FilterSystemSystem(TypedDict, total=False):
 
 
 class FilterSystem(TypedDict, total=False):
+    """Filter by system metadata"""
+
     system: FilterSystemSystem
     """System metadata on the database record."""
 

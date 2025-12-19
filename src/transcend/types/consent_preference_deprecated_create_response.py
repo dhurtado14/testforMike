@@ -53,6 +53,11 @@ class Node(BaseModel):
 
 
 class LastKey(BaseModel):
+    """Key for cursor pagination.
+
+    To fetch the next page, set the startAt property to equal this lastKey.
+    """
+
     decryption_status: Literal["DECRYPTED", "ERROR"] = FieldInfo(alias="decryptionStatus")
     """The decryption status of the userId field in the last key.
 
